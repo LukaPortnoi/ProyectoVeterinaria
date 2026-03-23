@@ -23,7 +23,7 @@ interface Appointment {
 }
 
 const MisTurnos: React.FC<MisTurnosProps> = ({ userType, onBack }) => {
-  const [filter, setFilter] = useState<'all' | 'pending' | 'confirmed' | 'completed' | 'cancelled'>('all');
+  const [filter, setFilter] = useState<'pending' | 'confirmed' | 'completed' | 'cancelled'>('pending');
 
   // Mock data - diferentes según el tipo de usuario
   const getAppointments = (): Appointment[] => {
@@ -113,10 +113,7 @@ const MisTurnos: React.FC<MisTurnosProps> = ({ userType, onBack }) => {
 
   const appointments = getAppointments();
 
-  const filteredAppointments = appointments.filter(appointment => {
-    const matchesFilter = filter === 'all' || appointment.status === filter;
-    return matchesFilter;
-  });
+  const filteredAppointments = appointments.filter(appointment => appointment.status === filter);
 
   const getStatusConfig = (status: string) => {
     switch (status) {
@@ -210,7 +207,7 @@ const MisTurnos: React.FC<MisTurnosProps> = ({ userType, onBack }) => {
                 <div className="text-right">
                   <div className="text-2xl font-bold text-blue-600">{filteredAppointments.length}</div>
                   <div className="text-sm text-gray-600">
-                    {filter === 'all' ? 'Total' : getStatusConfig(filter).text}
+                    {getStatusConfig(filter).text}
                   </div>
                 </div>
                 
@@ -224,7 +221,7 @@ const MisTurnos: React.FC<MisTurnosProps> = ({ userType, onBack }) => {
             </div>
           </div>
 
-          {/* Filters integrados en el header */}
+          {/* Filtro por estado */}
           <div className="mt-6 pt-6 border-t border-gray-100">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
@@ -233,15 +230,14 @@ const MisTurnos: React.FC<MisTurnosProps> = ({ userType, onBack }) => {
               </div>
               <div className="flex flex-wrap gap-2">
                 {[
-                  { key: 'all', label: 'Todas', count: appointments.length },
-                  { key: 'pending', label: 'Pendientes', count: appointments.filter(a => a.status === 'pending').length },
-                  { key: 'confirmed', label: 'Confirmadas', count: appointments.filter(a => a.status === 'confirmed').length },
-                  { key: 'completed', label: 'Completadas', count: appointments.filter(a => a.status === 'completed').length },
-                  { key: 'cancelled', label: 'Canceladas', count: appointments.filter(a => a.status === 'cancelled').length }
+                  { key: 'pending', label: 'Pendiente', count: appointments.filter(a => a.status === 'pending').length },
+                  { key: 'confirmed', label: 'Confirmado', count: appointments.filter(a => a.status === 'confirmed').length },
+                  { key: 'completed', label: 'Completado', count: appointments.filter(a => a.status === 'completed').length },
+                  { key: 'cancelled', label: 'Cancelado', count: appointments.filter(a => a.status === 'cancelled').length }
                 ].map(({ key, label, count }) => (
                   <button
                     key={key}
-                    onClick={() => setFilter(key as any)}
+                    onClick={() => setFilter(key as 'pending' | 'confirmed' | 'completed' | 'cancelled')}
                     className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center space-x-2 ${
                       filter === key
                         ? 'bg-blue-600 text-white shadow-lg'
@@ -251,8 +247,8 @@ const MisTurnos: React.FC<MisTurnosProps> = ({ userType, onBack }) => {
                     <span>{label}</span>
                     {count > 0 && (
                       <span className={`text-xs rounded-full px-2 py-0.5 ${
-                        filter === key 
-                          ? 'bg-white bg-opacity-20 text-white' 
+                        filter === key
+                          ? 'bg-white bg-opacity-20 text-white'
                           : 'bg-blue-100 text-blue-600'
                       }`}>
                         {count}

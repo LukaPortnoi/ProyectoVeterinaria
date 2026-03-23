@@ -451,6 +451,50 @@ export const obetenerServiciosCuidadores = async (pageNumber, filtros) => {
     }
 };
 
+// ---- Notificaciones ----
+
+export const getNotificaciones = async (tipoDestinatario, destinatarioId, page = 1, limit = 20) => {
+    try {
+        const response = await axios.get(`${API_URL}/notificaciones/${tipoDestinatario}/${destinatarioId}`, {
+            params: { page, limit }
+        });
+        return response.data;
+    } catch (error) {
+        console.error("Error al obtener notificaciones:", error);
+        throw error;
+    }
+};
+
+export const marcarNotificacionLeida = async (notificacionId) => {
+    try {
+        const response = await axios.put(`${API_URL}/notificaciones/${notificacionId}/leer`);
+        return response.data;
+    } catch (error) {
+        console.error("Error al marcar notificación como leída:", error);
+        throw error;
+    }
+};
+
+export const marcarTodasNotificacionesLeidas = async (tipoDestinatario, destinatarioId) => {
+    try {
+        const response = await axios.put(`${API_URL}/notificaciones/${tipoDestinatario}/${destinatarioId}/leer-todas`);
+        return response.data;
+    } catch (error) {
+        console.error("Error al marcar todas como leídas:", error);
+        throw error;
+    }
+};
+
+export const eliminarNotificacion = async (notificacionId) => {
+    try {
+        const response = await axios.delete(`${API_URL}/notificaciones/${notificacionId}`);
+        return response.data;
+    } catch (error) {
+        console.error("Error al eliminar notificación:", error);
+        throw error;
+    }
+};
+
 export const getServiciosPaseadores = async (pageNumber, filtros = {}) => {
   try {
     const filtrosLimpiados = Object.fromEntries(

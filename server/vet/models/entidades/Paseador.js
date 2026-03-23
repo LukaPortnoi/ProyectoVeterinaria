@@ -5,7 +5,7 @@ export class Paseador extends Usuario {
    
 
     aceptarReserva(reserva) {
-        const notificacion = reserva.actualizarEstado(EstadoReserva.ACEPTADA);
+        const notificacion = reserva.actualizarEstado(EstadoReserva.CONFIRMADA);
         this.recibirNotificacion(notificacion);
     }
 

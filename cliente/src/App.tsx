@@ -89,7 +89,7 @@ function App() {
   useEffect(() => {
     // Definir qué vistas están permitidas para cada tipo de usuario
     const vistasPorTipo = {
-      'cliente': ['home', 'create-service', 'appointments', 'notifications', 'my-pets', 'register-pet'],
+      'cliente': ['home', 'appointments', 'notifications', 'my-pets', 'register-pet'],
       'veterinaria': ['home', 'create-service', 'appointments', 'notifications', 'my-vet-services'],
       'paseador': ['home', 'create-service', 'appointments', 'notifications', 'my-walks'],
       'cuidador': ['home', 'create-service', 'appointments', 'notifications', 'my-care-services']

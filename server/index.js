@@ -46,6 +46,10 @@ import { ServicioVeterinariaController } from "./vet/controllers/servicioVeterin
 import { ServicioCuidadorController } from "./vet/controllers/servicioCuidadorController.js";
 import { ServicioPaseadorController } from "./vet/controllers/servicioPaseadorController.js";
 import { ReservaController } from "./vet/controllers/reservaController.js";
+import { NotificacionController } from "./vet/controllers/notificacionController.js";
+
+import { NotificacionRepository } from "./vet/models/repositories/notificacionRepository.js";
+import { NotificacionService } from "./vet/services/notificacionService.js";
 
 import { MongoDBClient } from "./vet/config/database.js";
 import { errorHandler } from "./vet/middlewares/errorHandler.js";
@@ -71,6 +75,9 @@ const servicioCuidadorService = new ServicioCuidadorService(servicioCuidadorRepo
 const servicioPaseadorService = new ServicioPaseadorService(servicioPaseadorRepo, paseadorRepo, ciudadRepo, localidadRepo, reservaRepo);
 const reservaService = new ReservaService(reservaRepo, servicioVeterinariaRepo, servicioCuidadorRepo, servicioPaseadorRepo,clienteRepo, cuidadorRepo, paseadorRepo, veterinariaRepo);
 
+const notificacionRepo = new NotificacionRepository();
+const notificacionService = new NotificacionService(notificacionRepo);
+
 const clienteController = new ClienteController(clienteService, reservaService);
 const cuidadorController = new CuidadorController(cuidadorService, reservaService);
 const paseadorController = new PaseadorController(paseadorService, reservaService);
@@ -79,6 +86,7 @@ const servicioVeterinariaController = new ServicioVeterinariaController(servicio
 const servicioCuidadorController = new ServicioCuidadorController(servicioCuidadorService);
 const servicioPaseadorController = new ServicioPaseadorController(servicioPaseadorService);
 const reservaController = new ReservaController(reservaService);
+const notificacionController = new NotificacionController(notificacionService);
 
 
 
@@ -124,6 +132,7 @@ server.setController(ServicioVeterinariaController, servicioVeterinariaControlle
 server.setController(ServicioCuidadorController, servicioCuidadorController);
 server.setController(ServicioPaseadorController, servicioPaseadorController);
 server.setController(ReservaController, reservaController);
+server.setController(NotificacionController, notificacionController);
 
 /* server.setController(CiudadController, ciudadController);
 

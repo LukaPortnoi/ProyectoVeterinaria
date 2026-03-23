@@ -7,7 +7,8 @@ import servicioVeterinariaRoutes from "./servicioVeterinariaRoutes.js"
 import servicioCuidadorRoutes from "./servicioCuidadorRoutes.js"
 import servicioPaseadorRoutes from "./servicioPaseadorRoutes.js"
 import reservaRoutes from "./reservaRoutes.js"
+import notificacionRoutes from "./notificacionRoutes.js"
 
-const routes = [clienteRoutes, cuidadorRoutes, paseadorRoutes, veterinariaRoutes, servicioVeterinariaRoutes, servicioCuidadorRoutes, servicioPaseadorRoutes, reservaRoutes ]
+const routes = [clienteRoutes, cuidadorRoutes, paseadorRoutes, veterinariaRoutes, servicioVeterinariaRoutes, servicioCuidadorRoutes, servicioPaseadorRoutes, reservaRoutes, notificacionRoutes ]
 
 export default routes

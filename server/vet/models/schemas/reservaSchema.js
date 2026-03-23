@@ -36,7 +36,7 @@ const reservaSchema = new mongoose.Schema({
     type: String,
     required: true,
     trim: true,
-    enum: ["PENDIENTE", "ACEPTADA", "CANCELADA", "RECHAZADA", "COMPLETADA"],
+    enum: ["PENDIENTE", "CONFIRMADA", "CANCELADA", "RECHAZADA", "COMPLETADA"],
   },
   horario: {
     type: String,
