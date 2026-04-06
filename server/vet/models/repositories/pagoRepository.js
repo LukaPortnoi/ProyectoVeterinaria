@@ -24,6 +24,22 @@ export class PagoRepository {
     return resumen;
   }
 
+  async getResumenComisiones() {
+    const result = await PagoModel.aggregate([
+      { $match: { estado: 'APROBADO', montoComision: { $ne: null } } },
+      {
+        $group: {
+          _id: null,
+          totalComisiones: { $sum: '$montoComision' },
+          totalProveedores: { $sum: '$montoProveedor' },
+          totalBruto: { $sum: '$monto' },
+          count: { $sum: 1 },
+        },
+      },
+    ]);
+    return result[0] || { totalComisiones: 0, totalProveedores: 0, totalBruto: 0, count: 0 };
+  }
+
   async findByReservaId(reservaId) {
     return PagoModel.findOne({ reservaId });
   }

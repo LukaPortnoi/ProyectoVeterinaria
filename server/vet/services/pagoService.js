@@ -2,9 +2,10 @@ import { MercadoPagoConfig, Preference, Payment } from "mercadopago";
 import { ValidationError, NotFoundError } from "../errors/AppError.js";
 
 export class PagoService {
-  constructor(reservaService, pagoRepository) {
+  constructor(reservaService, pagoRepository, configuracionRepo) {
     this.reservaService = reservaService;
     this.pagoRepository = pagoRepository;
+    this.configuracionRepo = configuracionRepo;
     this.client = new MercadoPagoConfig({
       accessToken: process.env.MP_ACCESS_TOKEN || "",
     });
@@ -92,6 +93,7 @@ export class PagoService {
     }
 
     if (paymentData.status === "approved") {
+      await this._aplicarComision(pagoExistente);
       await this.reservaService.confirmarPorPago(reservaId, paymentId.toString());
     } else if (paymentData.status === "rejected" || paymentData.status === "cancelled") {
       await this.reservaService.cancelarPorPago(reservaId);
@@ -99,6 +101,22 @@ export class PagoService {
     // Para "pending" e "in_process" no hacemos nada — la reserva sigue en PENDIENTE_PAGO
 
     return { status: paymentData.status, reservaId };
+  }
+
+  async _aplicarComision(pago) {
+    if (!pago) return;
+    const config = await this.configuracionRepo.getConfig();
+    const porcentaje = config.comisionPorcentaje || 0;
+    const fija = config.comisionFija || 0;
+
+    const comision = Math.round(((pago.monto * porcentaje) / 100 + fija) * 100) / 100;
+    const montoProveedor = Math.max(pago.monto - comision, 0);
+
+    pago.montoComision = comision;
+    pago.montoProveedor = montoProveedor;
+    pago.comisionPorcentajeAplicado = porcentaje;
+    pago.comisionFijaAplicada = fija;
+    await this.pagoRepository.save(pago);
   }
 
   _mapearEstadoMP(mpStatus) {

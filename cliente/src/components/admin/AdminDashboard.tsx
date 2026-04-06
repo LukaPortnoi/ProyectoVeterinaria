@@ -28,6 +28,12 @@ interface Metricas {
     pendiente: { total: number; count: number };
     totalRecaudado: number;
   };
+  comisiones: {
+    totalComisiones: number;
+    totalProveedores: number;
+    totalBruto: number;
+    cantidadPagosConComision: number;
+  };
   servicios: {
     veterinaria: { activos: number; inactivos: number };
     paseador: { activos: number; inactivos: number };
@@ -158,6 +164,32 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
             value={metricas.servicios.totalActivos}
             subtitle={`Vet: ${metricas.servicios.veterinaria.activos} | Pas: ${metricas.servicios.paseador.activos} | Cui: ${metricas.servicios.cuidador.activos}`}
             icon={<svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>}
+            color="purple"
+          />
+        </div>
+
+        {/* Comisiones */}
+        <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">Comisiones PetConnect</h3>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+          <MetricCard
+            title="Comisiones Recaudadas"
+            value={formatCurrency(metricas.comisiones.totalComisiones)}
+            subtitle={`${metricas.comisiones.cantidadPagosConComision} pagos con comision`}
+            icon={<svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" /></svg>}
+            color="green"
+          />
+          <MetricCard
+            title="Pagado a Proveedores"
+            value={formatCurrency(metricas.comisiones.totalProveedores)}
+            subtitle="Monto neto transferido"
+            icon={<svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>}
+            color="blue"
+          />
+          <MetricCard
+            title="Ingresos Brutos"
+            value={formatCurrency(metricas.comisiones.totalBruto)}
+            subtitle={metricas.comisiones.totalBruto > 0 ? `Margen: ${((metricas.comisiones.totalComisiones / metricas.comisiones.totalBruto) * 100).toFixed(1)}%` : 'Sin pagos procesados'}
+            icon={<svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>}
             color="purple"
           />
         </div>
