@@ -93,7 +93,11 @@ export class PagoService {
     }
 
     if (paymentData.status === "approved") {
-      await this._aplicarComision(pagoExistente);
+      if (pagoExistente) {
+        await this._aplicarComision(pagoExistente);
+      } else {
+        console.error(`Pago no encontrado para preference ${paymentData.preference_id} — comisión no aplicada`);
+      }
       await this.reservaService.confirmarPorPago(reservaId, paymentId.toString());
     } else if (paymentData.status === "rejected" || paymentData.status === "cancelled") {
       await this.reservaService.cancelarPorPago(reservaId);
