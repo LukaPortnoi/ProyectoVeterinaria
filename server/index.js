@@ -79,6 +79,7 @@ const cuidadorRepo = new CuidadorRepository();
 const paseadorRepo = new PaseadorRepository();
 const veterinariaRepo = new VeterinariaRepository();
 const reservaRepo = new ReservaRepository();
+const configuracionRepo = new ConfiguracionRepository();
 
 const clienteService = new ClienteService(clienteRepo, ciudadRepo, localidadRepo, reservaRepo);
 const cuidadorService = new CuidadorService(cuidadorRepo, ciudadRepo, localidadRepo);
@@ -88,7 +89,7 @@ const servicioVeterinariaService = new ServicioVeterinariaService(servicioVeteri
 const servicioCuidadorService = new ServicioCuidadorService(servicioCuidadorRepo, cuidadorRepo, ciudadRepo, localidadRepo, reservaRepo);
 const servicioPaseadorService = new ServicioPaseadorService(servicioPaseadorRepo, paseadorRepo, ciudadRepo, localidadRepo, reservaRepo);
 const reservaService = new ReservaService(reservaRepo, servicioVeterinariaRepo, servicioCuidadorRepo, servicioPaseadorRepo,clienteRepo, cuidadorRepo, paseadorRepo, veterinariaRepo);
-const pagoService = new PagoService(reservaService, pagoRepo);
+const pagoService = new PagoService(reservaService, pagoRepo, configuracionRepo);
 const ciudadService = new CiudadService(ciudadRepo, localidadRepo);
 
 // Inicializar servicio de recordatorios
@@ -98,7 +99,6 @@ const recordatorioService = new RecordatorioService(reservaRepo, clienteRepo, cu
 //app.set('recordatorioService', recordatorioService);
 
 const adminRepo = new AdminRepository();
-const configuracionRepo = new ConfiguracionRepository();
 const adminService = new AdminService(adminRepo);
 const adminDashboardService = new AdminDashboardService(
     clienteRepo, veterinariaRepo, paseadorRepo, cuidadorRepo,

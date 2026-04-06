@@ -38,6 +38,27 @@ const pagoSchema = new mongoose.Schema(
       required: false,
       default: null,
     },
+    montoComision: {
+      type: Number,
+      default: null,
+      min: 0,
+    },
+    montoProveedor: {
+      type: Number,
+      default: null,
+      min: 0,
+    },
+    comisionPorcentajeAplicado: {
+      type: Number,
+      default: null,
+      min: 0,
+      max: 100,
+    },
+    comisionFijaAplicada: {
+      type: Number,
+      default: null,
+      min: 0,
+    },
   },
   { timestamps: true }
 );

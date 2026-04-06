@@ -40,6 +40,7 @@ export class AdminDashboardService {
             clientes, veterinarias, paseadores, cuidadores,
             reservasPorEstado,
             resumenPagos,
+            resumenComisiones,
             vetActivos, vetInactivos,
             pasActivos, pasInactivos,
             cuiActivos, cuiInactivos,
@@ -50,6 +51,7 @@ export class AdminDashboardService {
             this.cuidadorRepo.countAll(),
             this.reservaRepo.countByEstados(),
             this.pagoRepo.getResumenPagos(),
+            this.pagoRepo.getResumenComisiones(),
             this.servicioVeterinariaRepo.countByEstado('Activada'),
             this.servicioVeterinariaRepo.countByEstado('Desactivada'),
             this.servicioPaseadorRepo.countByEstado('Activada'),
@@ -79,6 +81,12 @@ export class AdminDashboardService {
                 pendiente: resumenPagos.PENDIENTE || { total: 0, count: 0 },
                 rechazado: resumenPagos.RECHAZADO || { total: 0, count: 0 },
                 totalRecaudado: resumenPagos.APROBADO?.total || 0,
+            },
+            comisiones: {
+                totalComisiones: resumenComisiones.totalComisiones,
+                totalProveedores: resumenComisiones.totalProveedores,
+                totalBruto: resumenComisiones.totalBruto,
+                cantidadPagosConComision: resumenComisiones.count,
             },
             servicios: {
                 veterinaria: { activos: vetActivos, inactivos: vetInactivos },
