@@ -31,7 +31,6 @@ import { PaseadorRepository } from "./vet/models/repositories/paseadorRepository
 import { VeterinariaRepository } from "./vet/models/repositories/veterinariaRepository.js";
 import { ClienteRepository } from "./vet/models/repositories/clienteRepository.js";
 import { ReservaRepository } from "./vet/models/repositories/reservaRepository.js";
-import { PagoRepository } from "./vet/models/repositories/pagoRepository.js";
 
 /* 
 */
@@ -43,7 +42,6 @@ import { ServicioVeterinariaService } from "./vet/services/servicioVeterinariaSe
 import { ServicioCuidadorService } from "./vet/services/servicioCuidadorService.js";
 import { ServicioPaseadorService } from "./vet/services/servicioPaseadorService.js";
 import { ReservaService } from "./vet/services/reservaService.js";
-import { PagoService } from "./vet/services/pagoService.js";
 import { CiudadService } from "./vet/services/ciudadService.js";
 import { RecordatorioService } from "./vet/services/recordatorioService.js";
 
@@ -57,19 +55,11 @@ import { ServicioVeterinariaController } from "./vet/controllers/servicioVeterin
 import { ServicioCuidadorController } from "./vet/controllers/servicioCuidadorController.js";
 import { ServicioPaseadorController } from "./vet/controllers/servicioPaseadorController.js";
 import { ReservaController } from "./vet/controllers/reservaController.js";
-import { PagoController } from "./vet/controllers/pagoController.js";
-
-import { AdminRepository } from "./vet/models/repositories/adminRepository.js";
-import { ConfiguracionRepository } from "./vet/models/repositories/configuracionRepository.js";
-import { AdminService } from "./vet/services/adminService.js";
-import { AdminDashboardService } from "./vet/services/adminDashboardService.js";
-import { AdminController } from "./vet/controllers/adminController.js";
 
 import { MongoDBClient } from "./vet/config/database.js";
 import { errorHandler } from "./vet/middlewares/errorHandler.js";
 
  const clienteRepo = new ClienteRepository();
-const pagoRepo = new PagoRepository();
 const ciudadRepo = new CiudadRepository();
 const localidadRepo = new LocalidadRepository();
 const servicioVeterinariaRepo = new ServicioVeterinariaRepository();
@@ -79,7 +69,6 @@ const cuidadorRepo = new CuidadorRepository();
 const paseadorRepo = new PaseadorRepository();
 const veterinariaRepo = new VeterinariaRepository();
 const reservaRepo = new ReservaRepository();
-const configuracionRepo = new ConfiguracionRepository();
 
 const clienteService = new ClienteService(clienteRepo, ciudadRepo, localidadRepo, reservaRepo);
 const cuidadorService = new CuidadorService(cuidadorRepo, ciudadRepo, localidadRepo);
@@ -89,7 +78,6 @@ const servicioVeterinariaService = new ServicioVeterinariaService(servicioVeteri
 const servicioCuidadorService = new ServicioCuidadorService(servicioCuidadorRepo, cuidadorRepo, ciudadRepo, localidadRepo, reservaRepo);
 const servicioPaseadorService = new ServicioPaseadorService(servicioPaseadorRepo, paseadorRepo, ciudadRepo, localidadRepo, reservaRepo);
 const reservaService = new ReservaService(reservaRepo, servicioVeterinariaRepo, servicioCuidadorRepo, servicioPaseadorRepo,clienteRepo, cuidadorRepo, paseadorRepo, veterinariaRepo);
-const pagoService = new PagoService(reservaService, pagoRepo, configuracionRepo);
 const ciudadService = new CiudadService(ciudadRepo, localidadRepo);
 
 // Inicializar servicio de recordatorios
@@ -98,15 +86,6 @@ const recordatorioService = new RecordatorioService(reservaRepo, clienteRepo, cu
 // Hacer el servicio disponible en el contexto de la aplicación
 //app.set('recordatorioService', recordatorioService);
 
-const adminRepo = new AdminRepository();
-const adminService = new AdminService(adminRepo);
-const adminDashboardService = new AdminDashboardService(
-    clienteRepo, veterinariaRepo, paseadorRepo, cuidadorRepo,
-    reservaRepo, pagoRepo,
-    servicioVeterinariaRepo, servicioPaseadorRepo, servicioCuidadorRepo,
-    configuracionRepo
-);
-
 const clienteController = new ClienteController(clienteService, reservaService);
 const cuidadorController = new CuidadorController(cuidadorService, reservaService);
 const paseadorController = new PaseadorController(paseadorService, reservaService);
@@ -114,10 +93,10 @@ const veterinariaController = new VeterinariaController(veterinariaService, rese
 const servicioVeterinariaController = new ServicioVeterinariaController(servicioVeterinariaService);
 const servicioCuidadorController = new ServicioCuidadorController(servicioCuidadorService);
 const servicioPaseadorController = new ServicioPaseadorController(servicioPaseadorService);
-const reservaController = new ReservaController(reservaService, pagoService);
-const pagoController = new PagoController(pagoService, reservaService);
+const reservaController = new ReservaController(reservaService);
 const ciudadController = new CiudadController(ciudadService);
-const adminController = new AdminController(adminService, adminDashboardService);
+
+
 
 const app = express();
 
@@ -171,7 +150,6 @@ app.use('/petcare', generalLimiter);
 // Rate limiting estricto en rutas de autenticacion: 10 intentos / 15min por IP
 app.use('/petcare/login', authLimiter);
 app.use('/petcare/signin', authLimiter);
-app.use('/petcare/auth/forgot-password', authLimiter);
 
 // Middleware de logging estructurado para todas las peticiones
 app.use((req, res, next) => {
@@ -203,9 +181,7 @@ server.setController(ServicioVeterinariaController, servicioVeterinariaControlle
 server.setController(ServicioCuidadorController, servicioCuidadorController);
 server.setController(ServicioPaseadorController, servicioPaseadorController);
 server.setController(ReservaController, reservaController);
-server.setController(PagoController, pagoController);
 server.setController(CiudadController, ciudadController);
-server.setController(AdminController, adminController);
 
 // Configuración de rutas y lanzamiento
 routes.forEach(r => {

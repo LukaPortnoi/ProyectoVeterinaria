@@ -36,22 +36,7 @@ const reservaSchema = new mongoose.Schema({
     type: String,
     required: true,
     trim: true,
-    enum: ["PENDIENTE_PAGO", "PENDIENTE", "CONFIRMADA", "CANCELADA", "COMPLETADA"],
-  },
-  precioTotal: {
-    type: Number,
-    required: false,
-    default: 0,
-  },
-  mercadoPagoPreferenceId: {
-    type: String,
-    required: false,
-    default: null,
-  },
-  mercadoPagoPaymentId: {
-    type: String,
-    required: false,
-    default: null,
+    enum: ["PENDIENTE", "CONFIRMADA", "CANCELADA", "COMPLETADA"],
   },
   horario: {
     type: String,

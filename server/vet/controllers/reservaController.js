@@ -1,29 +1,14 @@
 export class ReservaController {
-    constructor(reservaService, pagoService) {
+    constructor(reservaService) {
         this.reservaService = reservaService
-        this.pagoService = pagoService
     }
 
     async create(req, res, next){
         try {
-            const reserva = req.body
-            const reservaDTO = await this.reservaService.create(reserva)
-
-            // Crear preferencia de pago en MercadoPago
-            let pagoInfo = null;
-            try {
-                pagoInfo = await this.pagoService.crearPreferencia(reservaDTO);
-            } catch (mpError) {
-                // Si MP falla, la reserva quedó creada en PENDIENTE_PAGO.
-                // Devolvemos igualmente la reserva para que el cliente pueda reintentar.
-                console.error("Error al crear preferencia de MercadoPago:", mpError.message);
-            }
-
-            res.status(201).json({
-                ...reservaDTO,
-                init_point: pagoInfo?.init_point || null,
-                sandbox_init_point: pagoInfo?.sandbox_init_point || null,
-            })
+            const reserva = req.body    
+            const nuevo = await this.reservaService.create(reserva)
+    
+            res.status(201).json(nuevo)
         } catch(error) {
             next(error)
         }

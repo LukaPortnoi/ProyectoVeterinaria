@@ -5,6 +5,5 @@ export const TipoServicioVeterinario = {
     DESPARACITACION : 'Desparacitacion',    
     CIRUGIA : 'Cirugia',
     RADIOGRAFIA : 'Radiografia',
-    ECOGRAFIA : 'Ecografia',
-    OTRO : 'Otro'
+    ECOGRAFIA : 'Ecografia'
 } 
