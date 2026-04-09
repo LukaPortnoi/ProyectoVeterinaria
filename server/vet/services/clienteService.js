@@ -7,6 +7,7 @@ import { Notificacion } from "../models/entidades/Notificacion.js"
 import { ValidationError, ConflictError, NotFoundError } from "../errors/AppError.js"
 import { hashPassword, comparePassword } from "../utils/passwordUtils.js"
 import { sanitizePagination } from "../utils/paginationUtils.js"
+import { enviarEmailBienvenida } from "./emailService.js"
 
 
 export class ClienteService {
@@ -97,6 +98,8 @@ export class ClienteService {
         const nuevoCliente = new Cliente(nombreUsuario, email, objectDireccion, telefono, contraseniaHasheada)
 
         const clienteGuardado = await this.clienteRepository.save(nuevoCliente)
+
+        enviarEmailBienvenida(email, nombreUsuario, 'cliente').catch(() => {})
 
         return this.toDTO(clienteGuardado)
     }
@@ -238,6 +241,21 @@ export class ClienteService {
         await this.clienteRepository.save(cliente)
 
         return this.notificacionToDTO(notificacion)
+    }
+
+    async eliminarNotificacion(idUsuario, idNotificacion) {
+        const cliente = await this.clienteRepository.findById(idUsuario)
+        if(!cliente) {
+            throw new NotFoundError(`Cliente con id ${idUsuario} no encontrado`)
+        }
+
+        const index = cliente.notificaciones.findIndex(n => n.id == idNotificacion)
+        if(index == -1) {
+            throw new NotFoundError(`Notificacion con ${idNotificacion} no encontrada`)
+        }
+
+        cliente.notificaciones.splice(index, 1)
+        await this.clienteRepository.save(cliente)
     }
 
     async marcarTodasLeidas(id) {

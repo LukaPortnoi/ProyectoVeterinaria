@@ -8,7 +8,9 @@ import servicioCuidadorRoutes from "./servicioCuidadorRoutes.js"
 import servicioPaseadorRoutes from "./servicioPaseadorRoutes.js"
 import reservaRoutes from "./reservaRoutes.js"
 import localidadRoutes from "./localidadRoutes.js"
+import pagoRoutes from "./pagoRoutes.js"
+import adminRoutes from "./adminRoutes.js"
 
-const routes = [clienteRoutes, cuidadorRoutes, paseadorRoutes, veterinariaRoutes, servicioVeterinariaRoutes, servicioCuidadorRoutes, servicioPaseadorRoutes, reservaRoutes, localidadRoutes]
+const routes = [clienteRoutes, cuidadorRoutes, paseadorRoutes, veterinariaRoutes, servicioVeterinariaRoutes, servicioCuidadorRoutes, servicioPaseadorRoutes, reservaRoutes, localidadRoutes, pagoRoutes, adminRoutes]
 
 export default routes

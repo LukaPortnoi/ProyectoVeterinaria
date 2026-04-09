@@ -6,6 +6,7 @@ import { Notificacion } from "../models/entidades/Notificacion.js"
 import { ValidationError, ConflictError, NotFoundError } from "../errors/AppError.js"
 import { hashPassword, comparePassword } from "../utils/passwordUtils.js"
 import { sanitizePagination } from "../utils/paginationUtils.js"
+import { enviarEmailBienvenida } from "./emailService.js"
 
 
 export class PaseadorService {
@@ -93,6 +94,8 @@ export class PaseadorService {
         const nuevoPaseador = new Paseador(nombreUsuario, email,objectDireccion, telefono,  contraseniaHasheada)
 
         const paseadorGuardado = await this.paseadorRepository.save(nuevoPaseador)
+
+        enviarEmailBienvenida(email, nombreUsuario, 'paseador').catch(() => {})
 
         return this.toDTO(paseadorGuardado)
     }
@@ -228,6 +231,21 @@ export class PaseadorService {
         await this.paseadorRepository.save(paseador)
 
         return this.notificacionToDTO(notificacion)
+    }
+
+    async eliminarNotificacion(idUsuario, idNotificacion) {
+        const paseador = await this.paseadorRepository.findById(idUsuario)
+        if(!paseador) {
+            throw new NotFoundError(`Paseador con id ${idUsuario} no encontrado`)
+        }
+
+        const index = paseador.notificaciones.findIndex(n => n.id == idNotificacion)
+        if(index == -1) {
+            throw new NotFoundError(`Notificacion con ${idNotificacion} no encontrada`)
+        }
+
+        paseador.notificaciones.splice(index, 1)
+        await this.paseadorRepository.save(paseador)
     }
 
     async marcarTodasLeidas(id) {
