@@ -42,7 +42,7 @@ export interface Usuario {
 
 export interface AuthContextType {
   usuario: Usuario | null;
-  tipoUsuario: 'cliente' | 'veterinaria' | 'paseador' | 'cuidador' | 'admin' | null;
+  tipoUsuario: 'cliente' | 'veterinaria' | 'paseador' | 'cuidador' | null;
   login: (usuarioData: Usuario, tipo: string) => void;
   loginWithCredentials: (email: string, contrasenia: string, tipoUsuario: string) => Promise<Usuario>;
   registerWithCredentials: (
@@ -84,7 +84,6 @@ export interface AuthContextType {
    marcarLeidaDelProveedor: (usuarioId: string, notificacionId: string, tipoProveedor: string) => Promise<void>;
    marcarTodasLeidasDelProveedor: (usuarioId: string, tipoProveedor: string) => Promise<void>;
    marcarTodasLeidasDelCliente: (usuarioId: string) => Promise<void>;
-   eliminarNotificacionDelUsuario: (usuarioId: string, notificacionId: string, tipoUsuario: string) => Promise<void>;
    // Contador de notificaciones no leídas
    contadorNotificacionesNoLeidas: number;
    cargarContadorNotificaciones: () => Promise<void>;

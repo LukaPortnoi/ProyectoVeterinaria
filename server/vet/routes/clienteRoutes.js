@@ -54,10 +54,6 @@ export default function clienteRoutes(getController) {
             getController(ClienteController).marcarLeidaNotificacion(req, res, next)
     )
 
-    router.delete("/petcare/cliente/:id/notificaciones/:idNotificacion", authMiddleware, authorizationMiddleware('cliente'), (req, res, next) =>
-            getController(ClienteController).eliminarNotificacion(req, res, next)
-    )
-
     router.put("/petcare/cliente/:id/marcarNotificacionLeidas", authMiddleware, authorizationMiddleware('cliente'), (req, res, next) =>
             getController(ClienteController).marcarTodasLasNotificacionesLeidas(req, res, next)
     )

@@ -6,7 +6,6 @@ import { Notificacion } from "../models/entidades/Notificacion.js"
 import { ValidationError, ConflictError, NotFoundError } from "../errors/AppError.js"
 import { hashPassword, comparePassword } from "../utils/passwordUtils.js"
 import { sanitizePagination } from "../utils/paginationUtils.js"
-import { enviarEmailBienvenida } from "./emailService.js"
 
 
 export class VeterinariaService {
@@ -93,8 +92,6 @@ export class VeterinariaService {
         const nuevoVeterinaria = new Veterinaria(nombreUsuario, nombreClinica, email, objectDireccion, telefono, contraseniaHasheada)
 
         const veterinariaGuardada = await this.veterinariaRepository.save(nuevoVeterinaria)
-
-        enviarEmailBienvenida(email, nombreUsuario, 'veterinaria').catch(() => {})
 
         return this.toDTO(veterinariaGuardada)
     }
@@ -234,21 +231,6 @@ export class VeterinariaService {
         await this.veterinariaRepository.save(veterinaria)
 
         return this.notificacionToDTO(notificacion)
-    }
-
-    async eliminarNotificacion(idUsuario, idNotificacion) {
-        const veterinaria = await this.veterinariaRepository.findById(idUsuario)
-        if(!veterinaria) {
-            throw new NotFoundError(`Veterinaria con id ${idUsuario} no encontrado`)
-        }
-
-        const index = veterinaria.notificaciones.findIndex(n => n.id == idNotificacion)
-        if(index == -1) {
-            throw new NotFoundError(`Notificacion con ${idNotificacion} no encontrada`)
-        }
-
-        veterinaria.notificaciones.splice(index, 1)
-        await this.veterinariaRepository.save(veterinaria)
     }
 
     async marcarTodasLeidas(id) {

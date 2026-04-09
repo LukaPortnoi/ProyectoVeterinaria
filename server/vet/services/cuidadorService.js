@@ -6,7 +6,6 @@ import { Notificacion } from "../models/entidades/Notificacion.js"
 import { ValidationError, ConflictError, NotFoundError } from "../errors/AppError.js"
 import { hashPassword, comparePassword } from "../utils/passwordUtils.js"
 import { sanitizePagination } from "../utils/paginationUtils.js"
-import { enviarEmailBienvenida } from "./emailService.js"
 
 
 export class CuidadorService {
@@ -93,8 +92,6 @@ export class CuidadorService {
         const nuevoCuidador = new Cuidador(nombreUsuario, email,objectDireccion, telefono,  contraseniaHasheada)
 
         const cuidadorGuardado = await this.cuidadorRepository.save(nuevoCuidador)
-
-        enviarEmailBienvenida(email, nombreUsuario, 'cuidador').catch(() => {})
 
         return this.toDTO(cuidadorGuardado)
     }
@@ -231,21 +228,6 @@ export class CuidadorService {
         await this.cuidadorRepository.save(cuidador)
 
         return this.notificacionToDTO(notificacion)
-    }
-
-    async eliminarNotificacion(idUsuario, idNotificacion) {
-        const cuidador = await this.cuidadorRepository.findById(idUsuario)
-        if(!cuidador) {
-            throw new NotFoundError(`Cuidador con id ${idUsuario} no encontrado`)
-        }
-
-        const index = cuidador.notificaciones.findIndex(n => n.id == idNotificacion)
-        if(index == -1) {
-            throw new NotFoundError(`Notificacion con ${idNotificacion} no encontrada`)
-        }
-
-        cuidador.notificaciones.splice(index, 1)
-        await this.cuidadorRepository.save(cuidador)
     }
 
     async marcarTodasLeidas(id) {

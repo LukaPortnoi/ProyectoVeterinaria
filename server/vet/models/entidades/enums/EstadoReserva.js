@@ -1,5 +1,4 @@
 export const EstadoReserva = {
-    PENDIENTE_PAGO: 'PENDIENTE_PAGO',
     PENDIENTE: 'PENDIENTE',
     CONFIRMADA: 'CONFIRMADA',
     CANCELADA: 'CANCELADA',
